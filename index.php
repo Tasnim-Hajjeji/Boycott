@@ -4,5 +4,9 @@
     $users->execute();
 
     $res=$users->fetchAll();
-    include "./layout.php";
+
+    $page_title="Liste Users";
+    $template="index";
+
+    include "./layout.phtml";
 ?>

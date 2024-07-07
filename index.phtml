@@ -1,0 +1,77 @@
+<div class="container">
+    <h2 class="text-center mt-2 py-2">Liste Users</h2>
+    <?php
+    if (array_key_exists("message", $_GET)):
+        ?>
+        <div class="alert alert-success">
+            <?= $_GET['message']; ?>
+        </div>
+    <?php endif; ?>
+
+    <a href="./AddUser/index.php">
+        <button class="btn btn-primary mb-2 d-grid gap-2 col-6 mx-auto">Add</button>
+    </a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">nom</th>
+                <th scope="col">prenom</th>
+                <th scope="col">email</th>
+                <th scope="col">Operation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if (count($res) == 0) {
+                ?>
+                <tr>
+                    <td class="text-center" colspan="5">Table Empty</td>
+                </tr>
+                <?php
+            } else {
+
+                ?>
+                <?php foreach ($res as $val) { ?>
+                    <tr>
+                        <td><?= $val['id'] ?></td>
+                        <td><?= $val['nom'] ?></td>
+                        <td><?= $val['prenom'] ?></td>
+                        <td><?= $val['email'] ?></td>
+                        <td>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal<?= $val['id'] ?>">
+                                Delete
+                            </button>
+                            <a href="">
+                                <button class="btn btn-warning">Edit</button>
+                            </a>
+                        </td>
+                    </tr>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal<?= $val['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Do you want to delete <?= $val['nom'] ?>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <a href="./deleteUser.php?id=<?= $val['id'] ?>"><button type="button"
+                                            class="btn btn-primary">Delete</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php }
+            } ?>
+
+        </tbody>
+
+    </table>
+</div>
