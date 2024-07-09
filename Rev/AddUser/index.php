@@ -1,5 +1,5 @@
 <?php 
-require_once("../db_connect/index.php");
+require_once("../../db_connect/index.php");
 $errors=[];
 $nom="";
 $prenom = "";
@@ -45,6 +45,6 @@ if(array_key_exists('submit',$_POST)){
 }
 $page_title="Add User";
 $template="addUser";
-include "../layout.phtml";
+include "../../layout.phtml";
 
 ?>
