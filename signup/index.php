@@ -32,12 +32,14 @@ if (isset($_POST['submit'])){
         ]);
         $verify=$user_email->fetchAll();
         if(empty($verify)){
-            $user=$pdo->prepare("INSERT INTO `users`( `nom`, `prenom`, `email`, `password`) VALUES (:nom,:prenom,:email,:pass)");
+            $user=$pdo->prepare("INSERT INTO `users`( `nom`, `prenom`, `email`, `password`,`verified`, `token`) VALUES (:nom,:prenom,:email,:pass,:verif,:token)");
             $user->execute([
                 "nom" => $nom,
                 "prenom" => $prenom,
                 "email" => $email,
-                "pass" => password_hash($password, PASSWORD_DEFAULT)
+                "pass" => password_hash($password, PASSWORD_DEFAULT),
+                "verif"=>$verified,
+                "token"=>$token
             ]);
             header("location:../index.php");
         }else{
