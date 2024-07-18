@@ -19,7 +19,7 @@ if(array_key_exists('submit',$_POST)) {
         $errors['email'] = 'Email required';
     }
     if(empty($errors)){
-        $res=$pdo->prepare("update `users` SET `nom`=:nom,`prenom`=:prenom,`email`=:email  WHERE id=:id");
+        $res=$pdo->prepare("update `users` SET `nom`=:nom,`prenom`=:prenom,`email`=:email  WHERE id=:id ");
         $res->execute([
             "nom"=>$nom,
             "prenom"=>$prenom,
