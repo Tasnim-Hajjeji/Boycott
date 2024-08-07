@@ -52,7 +52,7 @@ if (isset($_POST['submit'])) {
             $link = "<a href='http://localhost/Boycott/VerifiedAccount/index.php?email=" . $email . "&token=" . $token . "&name=" . $nom . "'>
             Click And Verify Email
             </a>";
-            sendmail("BoycottTeam", $email, "LIEN DE VERIFICATION", "Cliquez sur ce lien pour vérifier l'e-mail'.$link.'");
+            sendmail("BoycottTeam", $email, "LIEN DE VERIFICATION", "Cliquez sur ce lien pour vérifier l'e-mail" . $link);
             header("location:../index.php");
         } else {
             $errors['email'] = "Email already exist";

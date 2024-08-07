@@ -21,7 +21,7 @@ if (isset($_POST['submit'])){
         $res->execute([
             "email"=>$email
         ]);
-        $user=$res->fetchAll();
+        $user=$res->fetch();
         if($user){
             if(password_verify($password,$user['password'])){
                 $_SESSION['nom']=$user['nom'];
