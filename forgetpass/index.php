@@ -18,24 +18,38 @@ if (isset($_POST['send'])) {
     if (empty($email)) {
         $errors['email'] = 'Email required';
     } else {
-        $token = mt_rand(1000, 9999);
-        $res = $pdo->prepare("UPDATE `users` SET `code_password` = :token WHERE `email` = :email");
-        $res->execute([
-            "token" => $token,
+        $test = $pdo->prepare("select * from users where email=:email");
+        $test->execute([
             "email" => $email
         ]);
-        sendmail("BoycottTeam", $email, "CODE DE VERIFICATION", "Voici votre code de vérification '$token'");
-        $_SESSION['reset_email'] = $email;
-        $page_title = "Reset Password";
-        $template = "resetpass";
+        $stmt = $test->fetch();
+        if ($stmt) {
+            if($stmt['verified']){
+
+                $token = mt_rand(1000, 9999);
+                $res = $pdo->prepare("UPDATE `users` SET `code_password` = :token WHERE `email` = :email");
+                $res->execute([
+                    "token" => $token,
+                    "email" => $email
+                ]);
+                sendmail("BoycottTeam", $email, "CODE DE VERIFICATION", "Voici votre code de vérification '$token'");
+                $_SESSION['reset_email'] = $email;
+                $page_title = "Reset Password";
+                $template = "resetpass";
+            }else{
+                $errors['email']='Email Not verified';
+            }
+        } else {
+            $errors['email'] = 'User Does Not Exist';
+        }
     }
 }
 
 if (isset($_POST['verify'])) {
     $email = $_SESSION['reset_email'] ?? '';
     $code = $_POST['code'];
-    $newPassword = $_POST['new_password'] ?? null;
-    $confirmPassword = $_POST['confirm_password'] ?? null;
+    $newPassword = $_POST['new_password'];
+    $confirmPassword = $_POST['confirm_password'];
     $_SESSION['code_verified'] = false;
     if (empty($email)) {
         $errors['email'] = 'Email required';
@@ -44,7 +58,9 @@ if (isset($_POST['verify'])) {
     if (empty($code)) {
         $errors['code'] = 'Code required';
     }
-
+    if(strlen($code)!=4){
+        $errors['code']='Should Be 4 Numbers';
+    }
     if (empty($errors)) {
         $stmt = $pdo->prepare("SELECT code_password FROM users WHERE email = :email");
         $stmt->execute(['email' => $email]);
@@ -65,7 +81,7 @@ if (isset($_POST['verify'])) {
                 } else {
                     $errors['password'] = 'Passwords do not match';
                 }
-            } else  {
+            } else {
                 $errors['password'] = 'Both password fields are required';
             }
         } else {
